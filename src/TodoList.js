@@ -3,6 +3,7 @@ import {ListGroup} from "react-bootstrap";
 import classNames from "classnames";
 import styled, {css} from 'styled-components'
 import RemoveItem from "./RemoveItem";
+import { withRouter } from 'react-router-dom'
 
 const ListItem = styled.span`
     background: rebeccapurple;
@@ -46,7 +47,10 @@ class TodoList extends Component {
         return (
             <ListGroup>
                 {filteredTodos.map((todo) => {
-                    return <ListGroup.Item key={todo.id} variant="info">
+                    return <ListGroup.Item key={todo.id} variant="info" onClick={() => {
+                        console.log(this.props);
+                        this.props.history.push(`/todoDetay/${todo.id}`);
+                    }}>
                         <ListItem completed={todo.completed} onClick={() => {
                             props.toggleTodo(todo.id);
                         }}>
@@ -62,4 +66,4 @@ class TodoList extends Component {
     }
 }
 
-export default TodoList;
+export default withRouter(TodoList);
