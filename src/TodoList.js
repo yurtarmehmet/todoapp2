@@ -34,9 +34,18 @@ class TodoList extends Component {
 
     render() {
         const props = this.props;
+        const filteredTodos = props.todos.filter((todo) => {
+            if(props.filter === "all"){
+                return true;
+            }else if(props.filter === "completed"){
+                return todo.completed
+            }else{
+                return !todo.completed
+            }
+        });
         return (
             <ListGroup>
-                {props.todos.map((todo) => {
+                {filteredTodos.map((todo) => {
                     return <ListGroup.Item key={todo.id} variant="info">
                         <ListItem completed={todo.completed} onClick={() => {
                             props.toggleTodo(todo.id);

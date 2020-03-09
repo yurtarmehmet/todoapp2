@@ -1,18 +1,33 @@
 import React, {useState, useEffect} from 'react';
 
-const Filters = () => {
+
+const filterOptions = [
+    { label: "All", slug: "all"},
+    { label: "Completed", slug: "completed"},
+    { label: "Not Completed", slug: "notCompleted"}
+];
+
+const Filters = (props) => {
     // state alternative
-    const [filter, setFilter] = useState("not completed");
+    const [filter, setFilter] = useState("all");
 
 
     // Did update and did moıunt alternative
     useEffect(() => {
-        // this.getData();
-    }, []);
+        props.filterTodos(filter);
+    }, [filter]);
 
     return (
-        <div>
-            Filters : {filter}
+        <div style={{margin: "20px"}}>
+            {
+                filterOptions.map((option) => {
+                    return <button onClick={(e) => {
+                        // prevent default click action
+                        e.preventDefault();
+                        setFilter(option.slug);
+                    }} style={{color: "#fff", background: option.slug === filter ? "red" : "gray"}}>{option.label}</button>
+                })
+            }
         </div>
     );
 };

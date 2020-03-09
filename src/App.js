@@ -10,8 +10,10 @@ class App extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+            _todos: [],
             todos: [],
-            loading: true
+            loading: true,
+            filter: "all"
         }
     }
 
@@ -21,6 +23,7 @@ class App extends React.Component {
         if(todos){
             setTimeout(() => {
                 this.setState({
+                    _todos: JSON.parse(todos),
                     todos: JSON.parse(todos),
                     loading: false
                 });
@@ -44,6 +47,12 @@ class App extends React.Component {
                     return {...todo, completed: !todo.completed};
                 }
                 return todo;
+            }),
+            _todos: this.state._todos.map((todo) => {
+                if(todo.id === id){
+                    return {...todo, completed: !todo.completed};
+                }
+                return todo;
             })
         }, () => {
             localStorage.setItem('todos', JSON.stringify(this.state.todos));
@@ -52,7 +61,8 @@ class App extends React.Component {
 
     add = (todo) => {
         this.setState({
-            todos: [...this.state.todos, todo]
+            todos: [...this.state.todos, todo],
+            _todos: [...this.state._todos, todo]
         }, () => {
             localStorage.setItem('todos', JSON.stringify(this.state.todos));
         });
@@ -62,10 +72,19 @@ class App extends React.Component {
         this.setState({
             todos: this.state.todos.filter((todo) => {
                 return todo.id !== id
+            }),
+            _todos: this.state._todos.filter((todo) => {
+                return todo.id !== id
             })
         }, () => {
             localStorage.setItem('todos', JSON.stringify(this.state.todos));
         })
+    }
+
+    filterTodos = (filter) => {
+        this.setState({
+            filter: filter
+        });
     }
 
     render() {
@@ -82,7 +101,7 @@ class App extends React.Component {
         return (
             <>
                 <h2>Todo List</h2>
-                <Filters name="name" surname="surname" />
+                <Filters name="name" surname="surname" filterTodos={this.filterTodos}/>
                 <AddTodo addTodo={this.add} />
                 {
                     Comp
