@@ -28,15 +28,7 @@ class TodoList extends Component {
 
 
     componentDidMount(){
-        const todos = localStorage.getItem('todos');
-        if(todos){
-            // loading ture
-            this.props.setLoading(true);
-            setTimeout(() => {
-                this.props.setLoading(false);
-                this.props.setTodosFromComponent(JSON.parse(todos));
-            }, 2000)
-        }
+        this.props.setTodosFromComponent();
     }
 
     componentDidUpdate(prevProps) {
@@ -94,9 +86,9 @@ TodoList.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        filter: state.filter,
-        todos: state.todos,
-        loading: state.loading
+        filter: state.filter.filter,
+        todos: state.todos.todos,
+        loading: state.loading.loading
     }
 };
 

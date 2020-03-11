@@ -1,4 +1,4 @@
-
+import {getTodos} from "./api";
 
 export function setTodos(todos) {
 
@@ -8,8 +8,10 @@ export function setTodos(todos) {
     //  new
     return (dispatch) => {
         dispatch(setLoading(true));
-        dispatch({type: "SET_TODOS", payload:todos});
-        dispatch(setLoading(false));
+        getTodos().then((result) => {
+            dispatch(setLoading(false));
+            dispatch({type: "SET_TODOS", payload:result.data});
+        })
     };
 }
 

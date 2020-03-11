@@ -31,7 +31,7 @@ const Filters = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        activeFilter: state.filter
+        activeFilter: state.filter.filter
     }
 };
 

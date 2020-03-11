@@ -1,12 +1,9 @@
-import {createStore, applyMiddleware} from "redux";
+import {createStore, applyMiddleware, combineReducers} from "redux";
 import reduxthunk from "redux-thunk";
 import {REMOVE_USER, SET_TODOS, SET_FILTER, SET_LOADING, TOGGLE_TODO} from "./constants";
 
 const initialState = {
     dataFromReduxStore: "This is from redux",
-    todos:  [],
-    loading: false,
-    filter: "all",
     users: [{
         name: "John",
         surname: "Doe",
@@ -19,18 +16,22 @@ const initialState = {
 };
 
 
-const rootReducer = function (state = initialState, action) {
+const todosState = {
+    todos:  []
+};
+
+const filterState = {
+    filter: "all"
+};
+
+const loadingState = {
+    loading: false
+};
+
+const todosReducer = function (state = todosState, action) {
     switch (action.type) {
         case SET_TODOS:
             return {...state, todos: action.payload};
-        case REMOVE_USER:
-            return {...state, users: state.users.filter((user) => {
-                    return user.id !== action.payload;
-                })};
-        case SET_FILTER:
-            return {...state, filter: action.payload};
-        case SET_LOADING:
-            return {...state, loading: action.payload};
         case TOGGLE_TODO:
             const newTodos = state.todos.map((todo) => {
                 if(todo.id === action.payload){
@@ -46,6 +47,26 @@ const rootReducer = function (state = initialState, action) {
     }
 };
 
+const filterReducer = function (state = filterState, action) {
+    switch (action.type) {
+        case SET_FILTER:
+            return {...state, filter: action.payload};
+        default:
+            return state;
+    }
+};
+
+const loadingReducer = function (state = loadingState, action) {
+    switch (action.type) {
+        case SET_LOADING:
+            return {...state, loading: action.payload};
+        default:
+            return state;
+    }
+};
+
+
+const rootReducer = combineReducers({todos: todosReducer, loading: loadingReducer, filter: filterReducer})
 const store = createStore(rootReducer, applyMiddleware(reduxthunk));
 
 export default store;

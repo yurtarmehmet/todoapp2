@@ -7,6 +7,7 @@ import TodoList from "./TodoList";
 import {connect} from "react-redux";
 import {setTodos} from "./actions";
 import {store} from "./store";
+import {getTodos} from "./api";
 
 
 class App extends React.Component {
@@ -18,6 +19,9 @@ class App extends React.Component {
     }
 
     componentDidMount(){
+        console.log(getTodos().then((result) => {
+            console.log(result);
+        }));
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
