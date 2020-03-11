@@ -12,9 +12,19 @@ const routes = [
     },
     {
         name: "Other Page",
-        path : "/otherPage",
+        path : "/other",
         component: OtherPage
-    }
+    },
+    {
+        name: "Todo Detail",
+        path : "/todoDetay/:id",
+        component: TodoDetail
+    },
+    {
+        name: "ProtectedPage",
+        path : "/protectedPage",
+        component: ProtectedPage
+    },
 ];
 
 export default routes;

@@ -4,15 +4,18 @@ import {Switch, Route, Link, Redirect} from "react-router-dom";
 import OtherPage from "./OtherPage";
 import TodoDetail from "./TodoDetail";
 import ProtectedPage from "./ProtectedPage";
+import PageWrapper from "./PageWrapper";
 import routes from "./routes";
+import {connect} from "react-redux";
 
 
 const isLoggedIn = true;
 
-const MainApp = () => {
+const MainApp = (props) => {
     return (
         <div>
             <div>
+                FROM REDUX : {props.exampleProp}
                 <h1>Header</h1>
                 <ul>
                     <li><Link to="/">
@@ -27,20 +30,21 @@ const MainApp = () => {
             </div>
             <Switch>
                 { routes.map((route) => {
-                    return <Route path={route.path} component={route.component}/>
+                    const ChildComp = route.component;
+                    return <Route exact path={route.path} component={(props) => <PageWrapper name={route.name} >
+                        <ChildComp {...props} />
+                    </PageWrapper>}/>
                 })}
-                <Route exact path="/todoDetay/:id" component={(props) => <TodoDetail {...props}/>} />
-                <Route exact path="/protectedPage" component={(props) => {
-                    if(isLoggedIn){
-                        return <ProtectedPage />
-                    }else {
-                        return <Redirect to="/other" />
-                    }
-                    }} />
             </Switch>
             <div>Footer</div>
         </div>
     );
 };
 
-export default MainApp;
+const mapStateToProps = (state) => {
+    return {
+        exampleProp: state.dataFromReduxStore
+    }
+};
+
+export default connect(mapStateToProps)(MainApp);

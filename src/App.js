@@ -4,6 +4,9 @@ import {Button} from "react-bootstrap";
 import AddTodo from "./AddTodo";
 import Filters from "./Filters";
 import TodoList from "./TodoList";
+import {connect} from "react-redux";
+import {setTodos} from "./actions";
+import {store} from "./store";
 
 
 class App extends React.Component {
@@ -22,11 +25,11 @@ class App extends React.Component {
         const todos = localStorage.getItem('todos');
         if(todos){
             setTimeout(() => {
-                this.setState({
-                    _todos: JSON.parse(todos),
-                    todos: JSON.parse(todos),
+        this.setState({
                     loading: false
                 });
+                console.log(JSON.parse(todos));
+                this.props.setTodosFromComponent(JSON.parse(todos));
             }, 2000)
         }
     }
@@ -92,12 +95,13 @@ class App extends React.Component {
         if(this.state.loading){
             Comp = <h1>Yükleniyor...</h1>
         }else{
-            if(this.state.todos.length > 0){
-                Comp = <TodoList {...this.state} toggleTodo={this.toggle} removeTodo={this.remove}/>;
+            if(this.props.todos.length > 0){
+                Comp = <TodoList {...this.state} todos={this.props.todos} toggleTodo={this.toggle} removeTodo={this.remove}/>;
             }else {
                 Comp = <h1>Todo Bulunmuyor</h1>;
             }
         }
+        console.log(JSON.stringify(this.props.todos));
         return (
             <>
                 <h2>Todo List</h2>
@@ -106,9 +110,33 @@ class App extends React.Component {
                 {
                     Comp
                 }
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dicta dolores ducimus eius eligendi facilis laudantium magni maiores minus nihil perspiciatis possimus praesentium, quae repellat temporibus ullam veritatis vero, voluptates?
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dicta dolores ducimus eius eligendi facilis laudantium magni maiores minus nihil perspiciatis possimus praesentium, quae repellat temporibus ullam veritatis vero, voluptates?
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dicta dolores ducimus eius eligendi facilis laudantium magni maiores minus nihil perspiciatis possimus praesentium, quae repellat temporibus ullam veritatis vero, voluptates?
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dicta dolores ducimus eius eligendi facilis laudantium magni maiores minus nihil perspiciatis possimus praesentium, quae repellat temporibus ullam veritatis vero, voluptates?
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dicta dolores ducimus eius eligendi facilis laudantium magni maiores minus nihil perspiciatis possimus praesentium, quae repellat temporibus ullam veritatis vero, voluptates?
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dicta dolores ducimus eius eligendi facilis laudantium magni maiores minus nihil perspiciatis possimus praesentium, quae repellat temporibus ullam veritatis vero, voluptates?
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dicta dolores ducimus eius eligendi facilis laudantium magni maiores minus nihil perspiciatis possimus praesentium, quae repellat temporibus ullam veritatis vero, voluptates?
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dicta dolores ducimus eius eligendi facilis laudantium magni maiores minus nihil perspiciatis possimus praesentium, quae repellat temporibus ullam veritatis vero, voluptates?
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dicta dolores ducimus eius eligendi facilis laudantium magni maiores minus nihil perspiciatis possimus praesentium, quae repellat temporibus ullam veritatis vero, voluptates?
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dicta dolores ducimus eius eligendi facilis laudantium magni maiores minus nihil perspiciatis possimus praesentium, quae repellat temporibus ullam veritatis vero, voluptates?
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dicta dolores ducimus eius eligendi facilis laudantium magni maiores minus nihil perspiciatis possimus praesentium, quae repellat temporibus ullam veritatis vero, voluptates?
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dicta dolores ducimus eius eligendi facilis laudantium magni maiores minus nihil perspiciatis possimus praesentium, quae repellat temporibus ullam veritatis vero, voluptates?
+
             </>
         );
     }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+    return {
+        todos: state.todos
+    }
+};
+
+const mapDispatchToProps = dispatch => ({
+   setTodosFromComponent: (todos) => dispatch(setTodos(todos))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
+
