@@ -1,28 +1,43 @@
 import React from 'react';
-import {Link, Switch} from "react-router-dom";
+import {connect} from "react-redux";
+import {removeUser} from "./actions";
 
-const OtherPage = () => {
+const OtherPage = (props) => {
+    console.log("Other Page Props", props);
+    const {usersFromRedux, removeUserFromRedux} = props;
     return (
         <div>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque est et eum itaque odit, porro praesentium ratione veritatis voluptates voluptatibus! Dolore in, numquam porro quam quod sapiente sed temporibus velit.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque est et eum itaque odit, porro praesentium ratione veritatis voluptates voluptatibus! Dolore in, numquam porro quam quod sapiente sed temporibus velit.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque est et eum itaque odit, porro praesentium ratione veritatis voluptates voluptatibus! Dolore in, numquam porro quam quod sapiente sed temporibus velit.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque est et eum itaque odit, porro praesentium ratione veritatis voluptates voluptatibus! Dolore in, numquam porro quam quod sapiente sed temporibus velit.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque est et eum itaque odit, porro praesentium ratione veritatis voluptates voluptatibus! Dolore in, numquam porro quam quod sapiente sed temporibus velit.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque est et eum itaque odit, porro praesentium ratione veritatis voluptates voluptatibus! Dolore in, numquam porro quam quod sapiente sed temporibus velit.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque est et eum itaque odit, porro praesentium ratione veritatis voluptates voluptatibus! Dolore in, numquam porro quam quod sapiente sed temporibus velit.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque est et eum itaque odit, porro praesentium ratione veritatis voluptates voluptatibus! Dolore in, numquam porro quam quod sapiente sed temporibus velit.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque est et eum itaque odit, porro praesentium ratione veritatis voluptates voluptatibus! Dolore in, numquam porro quam quod sapiente sed temporibus velit.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque est et eum itaque odit, porro praesentium ratione veritatis voluptates voluptatibus! Dolore in, numquam porro quam quod sapiente sed temporibus velit.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque est et eum itaque odit, porro praesentium ratione veritatis voluptates voluptatibus! Dolore in, numquam porro quam quod sapiente sed temporibus velit.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque est et eum itaque odit, porro praesentium ratione veritatis voluptates voluptatibus! Dolore in, numquam porro quam quod sapiente sed temporibus velit.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque est et eum itaque odit, porro praesentium ratione veritatis voluptates voluptatibus! Dolore in, numquam porro quam quod sapiente sed temporibus velit.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque est et eum itaque odit, porro praesentium ratione veritatis voluptates voluptatibus! Dolore in, numquam porro quam quod sapiente sed temporibus velit.
-            <Link to="/">
-                Anasayfa
-            </Link>
+            <h1>Users</h1>
+            <ul>
+                {
+                    usersFromRedux.map((user, index) => {
+                        return <li key={user.id}>{user.name}
+                        <span style={{background: "red", color: "#fff"}}
+                            onClick={() => {
+                                removeUserFromRedux(user.id);
+                            }}
+                        >
+                            Sil
+                        </span>
+                        </li>
+                    })
+                }
+            </ul>
         </div>
     );
 };
 
-export default OtherPage;
+
+
+const mapStateToProps = (state) => {
+    return {
+        usersFromRedux: state.users
+    }
+};
+
+const mapDispatchToProps = dispatch => ({
+    removeUserFromRedux: (id) => dispatch(removeUser(id))
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(OtherPage);

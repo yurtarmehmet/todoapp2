@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react';
-
+import React from 'react';
+import {connect} from "react-redux";
+import {setFilter} from "./actions";
 
 const filterOptions = [
     { label: "All", slug: "all"},
@@ -8,28 +9,34 @@ const filterOptions = [
 ];
 
 const Filters = (props) => {
-    // state alternative
-    const [filter, setFilter] = useState("all");
-
-
-    // Did update and did moıunt alternative
-    useEffect(() => {
-        props.filterTodos(filter);
-    }, [filter]);
-
+    const {activeFilter, setFilter} = props;
     return (
         <div style={{margin: "20px"}}>
             {
                 filterOptions.map((option) => {
                     return <button onClick={(e) => {
-                        // prevent default click action
                         e.preventDefault();
                         setFilter(option.slug);
-                    }} style={{color: "#fff", background: option.slug === filter ? "red" : "gray"}}>{option.label}</button>
+                    }}
+                    style={{
+                        background: activeFilter === option.slug ? "red" : "gray",
+                        color: "#fff"
+                    }}
+                    >{option.label}</button>
                 })
             }
         </div>
     );
 };
 
-export default Filters;
+const mapStateToProps = (state) => {
+    return {
+        activeFilter: state.filter
+    }
+};
+
+const mapDispatchToProps = dispatch => ({
+   setFilter: (filter) => dispatch(setFilter(filter))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filters);

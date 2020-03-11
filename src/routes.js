@@ -1,4 +1,3 @@
-import React from "react";
 import App from "./App";
 import OtherPage from "./OtherPage";
 import TodoDetail from "./TodoDetail";
@@ -18,7 +17,8 @@ const routes = [
     {
         name: "Todo Detail",
         path : "/todoDetay/:id",
-        component: TodoDetail
+        component: TodoDetail,
+        excluded: true
     },
     {
         name: "ProtectedPage",

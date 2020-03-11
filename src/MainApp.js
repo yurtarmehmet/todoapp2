@@ -9,29 +9,27 @@ import routes from "./routes";
 import {connect} from "react-redux";
 
 
-const isLoggedIn = true;
-
 const MainApp = (props) => {
     return (
         <div>
             <div>
-                FROM REDUX : {props.exampleProp}
                 <h1>Header</h1>
                 <ul>
-                    <li><Link to="/">
-                        Anasayfa
-                    </Link></li>
-                    <li>
-                        <Link to="/other">
-                            Other Page
-                        </Link>
-                    </li>
+                    {
+                        routes.map((route) => {
+                            if(!route.excluded){
+                                return <li key={route.path}><Link to={route.path}>
+                                    {route.name}
+                                </Link></li>
+                            }
+                        })
+                    }
                 </ul>
             </div>
             <Switch>
                 { routes.map((route) => {
                     const ChildComp = route.component;
-                    return <Route exact path={route.path} component={(props) => <PageWrapper name={route.name} >
+                    return <Route exact path={route.path} key={route.path} component={(props) => <PageWrapper name={route.name} >
                         <ChildComp {...props} />
                     </PageWrapper>}/>
                 })}

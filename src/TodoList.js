@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
+import propTypes from "prop-types";
 import {ListGroup} from "react-bootstrap";
 import classNames from "classnames";
 import styled, {css} from 'styled-components'
 import RemoveItem from "./RemoveItem";
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
+import {connect} from "react-redux";
+import {setTodos, setLoading ,toggleTodo} from "./actions";
 
 const ListItem = styled.span`
     background: rebeccapurple;
@@ -23,6 +26,19 @@ class TodoList extends Component {
         super(props);
     }
 
+
+    componentDidMount(){
+        const todos = localStorage.getItem('todos');
+        if(todos){
+            // loading ture
+            this.props.setLoading(true);
+            setTimeout(() => {
+                this.props.setLoading(false);
+                this.props.setTodosFromComponent(JSON.parse(todos));
+            }, 2000)
+        }
+    }
+
     componentDidUpdate(prevProps) {
         if(prevProps.todos.length < this.props.todos.length){
             window.scrollTo({
@@ -35,6 +51,12 @@ class TodoList extends Component {
 
     render() {
         const props = this.props;
+        if(props.loading){
+            return <div>Yükleniyor</div>
+        }
+        if(!props.todos.map){
+            return <div>Page</div>
+        }
         const filteredTodos = props.todos.filter((todo) => {
             if(props.filter === "all"){
                 return true;
@@ -48,10 +70,10 @@ class TodoList extends Component {
             <ListGroup>
                 {filteredTodos.map((todo) => {
                     return <ListGroup.Item key={todo.id} variant="info" onClick={() => {
-                        console.log(this.props);
                         this.props.history.push(`/todoDetay/${todo.id}`);
                     }}>
-                        <ListItem completed={todo.completed} onClick={() => {
+                        <ListItem completed={todo.completed} onClick={(e) => {
+                            e.stopPropagation();
                             props.toggleTodo(todo.id);
                         }}>
                         <span>
@@ -66,4 +88,22 @@ class TodoList extends Component {
     }
 }
 
-export default withRouter(TodoList);
+TodoList.propTypes = {
+    todos: propTypes.array
+};
+
+const mapStateToProps = (state) => {
+    return {
+        filter: state.filter,
+        todos: state.todos,
+        loading: state.loading
+    }
+};
+
+const mapDispatchToProps = dispatch => ({
+    setTodosFromComponent: (todos) => dispatch(setTodos(todos)),
+    setLoading: (loading) => dispatch(setLoading(loading)),
+    toggleTodo: (id) => dispatch(toggleTodo(id))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(TodoList));

@@ -13,25 +13,11 @@ class App extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            _todos: [],
-            todos: [],
-            loading: true,
-            filter: "all"
+            _todos: []
         }
     }
 
     componentDidMount(){
-        console.log("1. Component mount oldu");
-        const todos = localStorage.getItem('todos');
-        if(todos){
-            setTimeout(() => {
-        this.setState({
-                    loading: false
-                });
-                console.log(JSON.parse(todos));
-                this.props.setTodosFromComponent(JSON.parse(todos));
-            }, 2000)
-        }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -40,26 +26,6 @@ class App extends React.Component {
 
     componentWillUnmount() {
         console.log("3. Component Gidiyor")
-    }
-
-
-    toggle = (id) => {
-        this.setState({
-            todos: this.state.todos.map((todo) => {
-                if(todo.id === id){
-                    return {...todo, completed: !todo.completed};
-                }
-                return todo;
-            }),
-            _todos: this.state._todos.map((todo) => {
-                if(todo.id === id){
-                    return {...todo, completed: !todo.completed};
-                }
-                return todo;
-            })
-        }, () => {
-            localStorage.setItem('todos', JSON.stringify(this.state.todos));
-        })
     }
 
     add = (todo) => {
@@ -84,31 +50,14 @@ class App extends React.Component {
         })
     }
 
-    filterTodos = (filter) => {
-        this.setState({
-            filter: filter
-        });
-    }
-
     render() {
-        let  Comp;
-        if(this.state.loading){
-            Comp = <h1>Yükleniyor...</h1>
-        }else{
-            if(this.props.todos.length > 0){
-                Comp = <TodoList {...this.state} todos={this.props.todos} toggleTodo={this.toggle} removeTodo={this.remove}/>;
-            }else {
-                Comp = <h1>Todo Bulunmuyor</h1>;
-            }
-        }
-        console.log(JSON.stringify(this.props.todos));
         return (
             <>
                 <h2>Todo List</h2>
-                <Filters name="name" surname="surname" filterTodos={this.filterTodos}/>
+                <Filters />
                 <AddTodo addTodo={this.add} />
                 {
-                    Comp
+                    <TodoList  removeTodo={this.remove}/>
                 }
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dicta dolores ducimus eius eligendi facilis laudantium magni maiores minus nihil perspiciatis possimus praesentium, quae repellat temporibus ullam veritatis vero, voluptates?
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dicta dolores ducimus eius eligendi facilis laudantium magni maiores minus nihil perspiciatis possimus praesentium, quae repellat temporibus ullam veritatis vero, voluptates?
