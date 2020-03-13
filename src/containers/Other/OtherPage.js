@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from "react-redux";
-import {removeUser} from "./actions";
+import {removeUser} from "../../state/ducks/todo/actions";
 
 const OtherPage = (props) => {
     console.log("Other Page Props", props);

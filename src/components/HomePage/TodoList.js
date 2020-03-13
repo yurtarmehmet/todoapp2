@@ -6,7 +6,7 @@ import styled, {css} from 'styled-components'
 import RemoveItem from "./RemoveItem";
 import { withRouter } from 'react-router-dom';
 import {connect} from "react-redux";
-import {setTodos, setLoading ,toggleTodo} from "./actions";
+import {setTodos, setLoading ,toggleTodo} from "../../state/ducks/todo/actions";
 
 const ListItem = styled.span`
     background: rebeccapurple;
@@ -26,11 +26,6 @@ class TodoList extends Component {
         super(props);
     }
 
-
-    componentDidMount(){
-        this.props.setTodosFromComponent();
-    }
-
     componentDidUpdate(prevProps) {
         if(prevProps.todos.length < this.props.todos.length){
             window.scrollTo({
@@ -43,9 +38,6 @@ class TodoList extends Component {
 
     render() {
         const props = this.props;
-        if(props.loading){
-            return <div>Yükleniyor</div>
-        }
         if(!props.todos.map){
             return <div>Page</div>
         }
@@ -58,10 +50,18 @@ class TodoList extends Component {
                 return !todo.completed
             }
         });
+        if(filteredTodos.length < 1){
+            return <div>Todo Yok</div>
+        }
+        console.log("PROPS",this.props);
         return (
             <ListGroup>
+                {
+                    this.props.loading.indexOf("removingTodo") > -1 && <h1>Siliniyor...</h1>
+                }
                 {filteredTodos.map((todo) => {
-                    return <ListGroup.Item key={todo.id} variant="info" onClick={() => {
+                    return <ListGroup.Item key={todo.id} variant="info" onClick={(e) => {
+                        e.stopPropagation();
                         this.props.history.push(`/todoDetay/${todo.id}`);
                     }}>
                         <ListItem completed={todo.completed} onClick={(e) => {
@@ -71,7 +71,7 @@ class TodoList extends Component {
                         <span>
                             {todo.title}
                         </span>
-                            <RemoveItem removeTodo={props.removeTodo} todoId={todo.id}/>
+                            <RemoveItem todoId={todo.id}/>
                         </ListItem>
                     </ListGroup.Item>
                 })}
@@ -86,15 +86,13 @@ TodoList.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        filter: state.filter.filter,
+        filter: state.todos.filter,
         todos: state.todos.todos,
         loading: state.loading.loading
     }
 };
 
 const mapDispatchToProps = dispatch => ({
-    setTodosFromComponent: (todos) => dispatch(setTodos(todos)),
-    setLoading: (loading) => dispatch(setLoading(loading)),
     toggleTodo: (id) => dispatch(toggleTodo(id))
 });
 

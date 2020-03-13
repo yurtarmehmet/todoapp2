@@ -1,37 +1,27 @@
 import React from 'react';
-import App from "./App";
-import {Switch, Route, Link, Redirect} from "react-router-dom";
-import OtherPage from "./OtherPage";
-import TodoDetail from "./TodoDetail";
-import ProtectedPage from "./ProtectedPage";
-import PageWrapper from "./PageWrapper";
+import {Switch, Route, Link} from "react-router-dom";
+import {Layout} from "./components";
 import routes from "./routes";
 import {connect} from "react-redux";
+import './custom.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 
 const MainApp = (props) => {
     return (
         <div>
-            <div>
-                <h1>Header</h1>
-                <ul>
-                    {
-                        routes.map((route) => {
-                            if(!route.excluded){
-                                return <li key={route.path}><Link to={route.path}>
-                                    {route.name}
-                                </Link></li>
-                            }
-                        })
-                    }
-                </ul>
-            </div>
             <Switch>
                 { routes.map((route) => {
                     const ChildComp = route.component;
-                    return <Route exact path={route.path} key={route.path} component={(props) => <PageWrapper name={route.name} >
-                        <ChildComp {...props} />
-                    </PageWrapper>}/>
+                    return <>
+                        <div>
+                            <Route exact path={route.path} key={route.path} component={(props) => <Layout.PageWrapper name={route.name} >
+                                <Layout.Header {...props} />
+                                <ChildComp {...props} />
+                            </Layout.PageWrapper>}/>
+                        </div>
+                    </>
                 })}
             </Switch>
             <div>Footer</div>

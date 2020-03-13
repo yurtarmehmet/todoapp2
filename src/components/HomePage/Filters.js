@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from "react-redux";
-import {setFilter} from "./actions";
+import {setFilter} from "../../state/ducks/todo/actions";
 
 const filterOptions = [
     { label: "All", slug: "all"},
@@ -31,7 +31,7 @@ const Filters = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        activeFilter: state.filter.filter
+        activeFilter: state.todos.filter
     }
 };
 

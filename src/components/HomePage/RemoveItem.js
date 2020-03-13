@@ -1,5 +1,7 @@
 import React from 'react';
 import styled, {css} from "styled-components";
+import {toggleTodo, removeTodo} from "../../state/ducks/todo/actions";
+import {connect} from "react-redux";
 
 const Remove = styled.div`
         color: #fff;
@@ -8,6 +10,8 @@ const Remove = styled.div`
         width: 40px;
         cursor: pointer;
         text-decoration: none;
+        display: inline-block;
+        margin-left: 30px;
     `;
 
 
@@ -46,4 +50,8 @@ class RemoveItem extends React.Component {
     }
 }
 
-export default RemoveItem;
+const mapDispatchToProps = dispatch => ({
+    removeTodo: (id) => dispatch(removeTodo(id))
+});
+
+export default connect(null, mapDispatchToProps)(RemoveItem);

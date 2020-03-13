@@ -1,13 +1,10 @@
-import App from "./App";
-import OtherPage from "./OtherPage";
-import TodoDetail from "./TodoDetail";
-import ProtectedPage from "./ProtectedPage";
+import {HomePage, OtherPage, TodoDetail, ProtectedPage} from "./containers";
 
 const routes = [
     {
         name: "HomePage",
         path: "/",
-        component: App
+        component: HomePage
     },
     {
         name: "Other Page",
